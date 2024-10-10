@@ -10,6 +10,12 @@ variable "aws_secret_key" {
   default     = ""
 }
 
+variable "aws_region" {
+  description = "AWS region name"
+  type        = string
+  default     = "us-east-1"
+}
+
 variable "cluster_name" {
   description = "The name of the EKS cluster"
   type        = string
