@@ -10,11 +10,12 @@ variable "aws_secret_key" {
   default     = ""
 }
 
-variable "AWS_DEFAULT_REGION" {
-  description = "AWS region name"
+variable "region" {
+  description = "AWS region to create resources in"
   type        = string
-  default     = "us-east-1"
+  default     = "us-east-1"  # or any preferred region
 }
+
 
 variable "cluster_name" {
   description = "The name of the EKS cluster"
