@@ -1,9 +1,11 @@
-output "public_ip" {
- value       = aws_instance.public_instance.public_ip
- description = "Public IP Address of EC2 instance"
+output "cluster_endpoint" {
+  value = aws_eks_cluster.this.endpoint
 }
 
-output "instance_id" {
- value       = aws_instance.public_instance.id
- description = "Instance ID"
+output "cluster_name" {
+  value = aws_eks_cluster.this.name
+}
+
+output "cluster_certificate_authority_data" {
+  value = aws_eks_cluster.this.certificate_authority[0].data
 }
