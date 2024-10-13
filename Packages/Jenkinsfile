@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Check out the repository containing the install_tools.py script
+                git branch: 'main', url: 'https://your-repo-url.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Update the system and install Python 3 and pip if not already installed
+                    sh '''
+                        sudo apt-get update -y
+                        sudo apt-get install -y python3 python3-pip
+                    '''
+                }
+            }
+        }
+
+        stage('Run Python Script') {
+            steps {
+                script {
+                    // Run the install_tools.py script
+                    sh 'python3 install_tools.py'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Installation script ran successfully.'
+        }
+        failure {
+            echo 'Installation script failed.'
+        }
+    }
+}
