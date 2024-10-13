@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = 'your-dockerhub-username/python-app:latest' // Replace with your DockerHub username/repo
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Check out the repository containing the Python app and Dockerfile
+                git branch: 'main', url: 'https://your-repo-url.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image for the Python app
+                    sh 'docker build -t $DOCKER_IMAGE .'
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // Run the Docker container from the built image
+                    sh 'docker run -d -p 3500:3500 $DOCKER_IMAGE'
+                }
+            }
+        }
+
+        stage('Push Docker Image to DockerHub') {
+            steps {
+                script {
+                    // Login to DockerHub
+                    sh '''
+                    echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+                    '''
+                    // Push the Docker image to DockerHub
+                    sh 'docker push $DOCKER_IMAGE'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Docker image built, run, and pushed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
